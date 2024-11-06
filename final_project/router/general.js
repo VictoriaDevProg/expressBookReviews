@@ -15,6 +15,10 @@ const doesExist = (username)=>{
   }
 }
 
+const getAllBooks = () => {
+  return books;
+};
+
 public_users.post("/register", (req,res) => {
   //Write your code here
   const username = req.body.username;
@@ -32,9 +36,15 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
+// Task 10: Get all books using an async callback function
+public_users.get('/',async (req, res)=> {
   //Write your code here
-  return res.send(JSON.stringify(books,null,4));
+  try{
+    const allBooks = await getAllBooks();
+    return res.send(JSON.stringify(books,null,4));
+  }catch(err){
+    res.status(500).send(err);
+  }
 });
 
 // Get book details based on ISBN
