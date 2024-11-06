@@ -45,7 +45,7 @@ regd_users.post("/login", (req,res) => {
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
   //Write your code here
-  const booksByIsbn = req.params.isbn;
+    const booksByIsbn = req.params.isbn;
     const review = req.body.review;
     const username = req.session.authorization.username;
     console.log("Add a review: ", req.params, req.body, req.session);
@@ -57,6 +57,20 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     else {
         return res.status(404).json({message: `ISBN ${isbn} not found`});
     }
+});
+
+//delete a review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+  const booksByIsbn = req.params.isbn;
+  const username = req.session.authorization.username;
+  if (books[booksByIsbn]) {
+      let book = books[booksByIsbn];
+      delete book.reviews[username];
+      return res.status(200).send("Review successfully deleted");
+  }
+  else {
+      return res.status(404).json({message: `ISBN ${isbn} not found`});
+  }
 });
 
 module.exports.authenticated = regd_users;
