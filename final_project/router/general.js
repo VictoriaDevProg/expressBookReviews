@@ -48,12 +48,32 @@ public_users.get('/',async (req, res)=> {
 });
 
 // Get book details based on ISBN
+// public_users.get('/isbn/:isbn',function (req, res) {
+//   //Write your code here
+//   const booksByIsbn = req.params.isbn;
+//   res.send(books[booksByIsbn])
+//  });
+
+// Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
   //Write your code here
   const booksByIsbn = req.params.isbn;
-  res.send(books[booksByIsbn])
+  // using a Promise for task 11
+  new Promise((resolve, reject) => { 
+    const bookDetails = books[booksByIsbn]; 
+    if (bookDetails) { 
+      resolve(bookDetails); 
+    } else { 
+      reject('Book not found'); 
+    } 
+  }) 
+  .then((bookDetails) => { 
+    res.send(bookDetails); 
+  }) 
+  .catch((error) => { 
+    res.status(404).send(error);
  });
-  
+});
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
   //Write your code here
