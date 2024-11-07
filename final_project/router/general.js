@@ -74,23 +74,45 @@ public_users.get('/isbn/:isbn',function (req, res) {
     res.status(404).send(error);
  });
 });
-// Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-  //Write your code here
-  let ans = []
-    for(const [key, values] of Object.entries(books)){
-        const book = Object.entries(values);
-        for(let i = 0; i < book.length ; i++){
-            if(book[i][0] == 'author' && book[i][1] == req.params.author){
-                ans.push(books[key]);
-            }
+// // Get book details based on author
+// public_users.get('/author/:author',function (req, res) {
+//   //Write your code here
+//   let ans = []
+//     for(const [key, values] of Object.entries(books)){
+//         const book = Object.entries(values);
+//         for(let i = 0; i < book.length ; i++){
+//             if(book[i][0] == 'author' && book[i][1] == req.params.author){
+//                 ans.push(books[key]);
+//             }
+//         }
+//     }
+//     if(ans.length == 0){
+//         return res.status(300).json({message: "Author not found"});
+//     }
+//     res.send(ans);
+// });
+
+// Search books by author using async for task 12
+public_users.get('/author/:author', async (req, res) => {
+  try {
+    const ans = [];
+    for (const [key, values] of Object.entries(books)) {
+      const book = Object.entries(values);
+      for (let i = 0; i < book.length; i++) {
+        if (book[i][0] === 'author' && book[i][1] === req.params.author) {
+          ans.push(books[key]);
         }
+      }
     }
-    if(ans.length == 0){
-        return res.status(300).json({message: "Author not found"});
+    if (ans.length === 0) {
+      return res.status(404).json({ message: "Author not found" });
     }
     res.send(ans);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
+
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
